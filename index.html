@@ -80,16 +80,6 @@
             color: #ef5350; /* Rosso chiaro */
             background-color: #4b2e2e; /* Sfondo rosso scuro */
         }
-        .info-box {
-            background-color: #2a3b4d; /* Sfondo info blu scuro */
-            border-left: 5px solid #2196F3;
-            padding: 15px;
-            margin-top: 30px;
-            border-radius: 5px;
-        }
-        .info-box p {
-            margin: 5px 0 0 0;
-        }
         .flex-container {
             display: flex;
             gap: 20px;
@@ -123,7 +113,7 @@
                 </div>
                 <div class="input-group">
                     <label for="altreSpese">Altre Spese (€)</label>
-                    <input type="number" id="altreSpese" value="0" min="0" oninput="calculateMinKgValue()">
+                    <input type="number"id="altreSpese" value="0" min="0" oninput="calculateMinKgValue()">
                 </div>
             </div>
 
@@ -169,14 +159,7 @@
                 <small id="decisionExplanation"></small>
             </div>
         </div>
-        <hr>
-
-        <div class="info-box">
-            <strong>Come usare GitHub Pages:</strong>
-            <p>1. Carica questo file come <code>index.html</code> nel tuo repository.</p>
-            <p>2. Vai su <code>Settings > Pages</code> e pubblica dal branch <code>main</code>.</p>
-            <p>3. <strong>Attendi 5-10 minuti</strong> affinché le modifiche siano online!</p>
-        </div>
+        
     </div>
 
     <script>
@@ -227,10 +210,22 @@
             }
         }
 
+        // Aggiunge la selezione del testo al click su tutti i campi numerici
+        function addSelectOnClick() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.select();
+                });
+            });
+        }
+
         // Chiamata iniziale per calcolare e visualizzare i valori al caricamento della pagina
         document.addEventListener('DOMContentLoaded', () => {
             calculateMinKgValue();
             makeDecision();
+            addSelectOnClick(); // Esegue la nuova funzione al caricamento
         });
     </script>
 </body>
