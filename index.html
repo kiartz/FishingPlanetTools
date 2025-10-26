@@ -184,8 +184,8 @@
                     </div>
                     <div class="flex-item">
                         <div class="input-group">
-                            <label for="valorePerKg">Valore per Kg (€)</label>
-                            <input type="number" id="valorePerKg" value="150.0" min="0.01" step="0.1" oninput="makeDecision()">
+                            <label for="valoreTotalePesce">Valore Totale Pesce (€)</label>
+                            <input type="number" id="valoreTotalePesce" value="150.0" min="0.01" step="0.1" oninput="makeDecision()">
                         </div>
                     </div>
                 </div>
@@ -228,24 +228,35 @@
             makeDecision();
         }
 
+
+        // --- LOGICA DI DECISIONE MODIFICATA ---
         function makeDecision() {
             const pesoPesce = parseFloat(document.getElementById('pesoPesce').value) || 0;
-            const valorePerKg = parseFloat(document.getElementById('valorePerKg').value) || 0;
+            const valoreTotalePesce = parseFloat(document.getElementById('valoreTotalePesce').value) || 0;
             const decisionResultDiv = document.getElementById('decisionResult');
             const decisionExplanation = document.getElementById('decisionExplanation');
 
             if (!decisionResultDiv) return; // Controllo di sicurezza
+            
+            // Calcola il valore reale al Kg del pesce attuale
+            let valoreRealePerKg = 0;
+            if (pesoPesce > 0) {
+                valoreRealePerKg = valoreTotalePesce / pesoPesce;
+            }
 
-            if (valorePerKg >= currentMinKgValue) {
+            // Confronta il valore reale al Kg con la soglia minima
+            if (valoreRealePerKg >= currentMinKgValue) {
                 decisionResultDiv.textContent = "TENERE";
                 decisionResultDiv.className = "decision green";
-                decisionExplanation.textContent = `Il valore di ${formatCurrency(valorePerKg)}/Kg è superiore o uguale alla soglia di ${formatCurrency(currentMinKgValue)}/Kg.`;
+                decisionExplanation.textContent = `Il valore reale (${formatCurrency(valoreRealePerKg)}/Kg) è superiore alla soglia (${formatCurrency(currentMinKgValue)}/Kg).`;
             } else {
                 decisionResultDiv.textContent = "RILASCIARE";
                 decisionResultDiv.className = "decision red";
-                decisionExplanation.textContent = `Il valore di ${formatCurrency(valorePerKg)}/Kg è inferiore alla soglia di ${formatCurrency(currentMinKgValue)}/Kg.`;
+                decisionExplanation.textContent = `Il valore reale (${formatCurrency(valoreRealePerKg)}/Kg) è inferiore alla soglia (${formatCurrency(currentMinKgValue)}/Kg).`;
             }
         }
+        // --- FINE MODIFICA ---
+
 
         // Aggiunge la selezione del testo al click su tutti i campi numerici
         function addSelectOnClick() {
