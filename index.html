@@ -8,23 +8,28 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 20px;
-            background-color: #f4f7f6;
-            color: #333;
+            background-color: #121212; /* Sfondo scuro */
+            color: #e0e0e0; /* Testo chiaro */
             line-height: 1.6;
         }
         .container {
             max-width: 900px;
             margin: auto;
-            background: #ffffff;
+            background: #1e1e1e; /* Sfondo container scuro */
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
         }
         h1, h2, h3 {
-            color: #2c3e50;
-            border-bottom: 2px solid #e0e0e0;
+            color: #ffffff; /* Titoli chiari */
+            border-bottom: 2px solid #3a3a3a;
             padding-bottom: 10px;
             margin-top: 30px;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #3a3a3a;
         }
         .input-group {
             margin-bottom: 15px;
@@ -33,19 +38,21 @@
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
-            color: #555;
+            color: #bbbbbb; /* Etichette chiare */
         }
         .input-group input[type="number"] {
-            width: calc(100% - 20px);
+            width: calc(100% - 22px); /* Adattato per padding */
             padding: 10px;
-            border: 1px solid #ccc;
+            border: 1px solid #444;
+            background-color: #2c2c2c; /* Sfondo input scuro */
+            color: #f0f0f0; /* Testo input chiaro */
             border-radius: 5px;
             font-size: 1rem;
             box-sizing: border-box;
         }
         .results {
-            background-color: #e8f5e9;
-            border-left: 5px solid #4CAF50;
+            background-color: #2a2a3a; /* Sfondo risultati */
+            border-left: 5px solid #2196F3; /* Accento blu */
             padding: 15px;
             margin-top: 20px;
             border-radius: 5px;
@@ -55,7 +62,7 @@
             font-size: 1.1rem;
         }
         .results strong {
-            color: #2e7d32;
+            color: #81b9ff; /* Testo forte (blu chiaro) */
         }
         .decision {
             font-size: 1.8rem;
@@ -66,19 +73,22 @@
             border-radius: 5px;
         }
         .decision.green {
-            color: #28a745;
-            background-color: #d4edda;
+            color: #66bb6a; /* Verde chiaro */
+            background-color: #2e4b31; /* Sfondo verde scuro */
         }
         .decision.red {
-            color: #dc3545;
-            background-color: #f8d7da;
+            color: #ef5350; /* Rosso chiaro */
+            background-color: #4b2e2e; /* Sfondo rosso scuro */
         }
         .info-box {
-            background-color: #e7f3ff;
+            background-color: #2a3b4d; /* Sfondo info blu scuro */
             border-left: 5px solid #2196F3;
             padding: 15px;
             margin-top: 30px;
             border-radius: 5px;
+        }
+        .info-box p {
+            margin: 5px 0 0 0;
         }
         .flex-container {
             display: flex;
@@ -97,7 +107,8 @@
         <h1>🐟 Calcolatore di Redditività della Pesca</h1>
         <p>Analizza i costi e l'obiettivo di pescato per determinare la soglia minima di valore, e decidi se trattenere il pesce in tempo reale.</p>
 
-        <h2>1. Analisi dei Costi e Obiettivo</h2>
+        
+<h2>1. Analisi dei Costi e Obiettivo</h2>
 
         <div class="flex-container">
             <div class="flex-item">
@@ -120,7 +131,7 @@
                 <h3>Obiettivo</h3>
                 <div class="input-group">
                     <label for="obiettivoKg">Obiettivo Pescato Totale (Kg)</label>
-                    <input type="number" id="obiettivoKg" value="25" min="1" step="0.1" oninput="calculateMinKgValue()">
+                    <input type="number" id="obiettivoKg" value="25" min="0.1" step="0.1" oninput="calculateMinKgValue()">
                 </div>
             </div>
 
@@ -129,13 +140,14 @@
                 <div class="results">
                     <p>Costi Totali: <strong id="totalCosts">0.00 €</strong></p>
                     <p>€/Kg Minimo Necessario (Soglia): <strong id="minKgValue">0.00 €</strong></p>
-                    <small>Questo è il valore minimo per ogni Kg di pescato per coprire i costi e raggiungere l'obiettivo.</small>
+                    <small>Questo è il valore minimo per ogni Kg di pescato per coprire i costi.</small>
                 </div>
             </div>
         </div>
         <hr>
 
-        <h2>2. Simulazione in Tempo Reale (Decisione)</h2>
+        
+<h2>2. Simulazione in Tempo Reale (Decisione)</h2>
         <p>La tua soglia minima per Kg è: <strong id="currentMinKgValueDisplay">0.00 €</strong></p>
 
         <div class="flex-container">
@@ -160,12 +172,10 @@
         <hr>
 
         <div class="info-box">
-            <strong>Istruzioni per l'utilizzo su GitHub Pages:</strong>
-            <p>1. Crea un nuovo repository su GitHub (es. <code>calcolatore-pesca-html</code>).</p>
-            <p>2. Carica questo file (<code>index.html</code>) nel repository.</p>
-            <p>3. Vai nelle impostazioni del repository, sezione "Pages".</p>
-            <p>4. Seleziona "main" come branch e "/ (root)" come cartella per la pubblicazione.</p>
-            <p>5. Salva. Dopo qualche minuto, la tua app sarà online all'indirizzo fornito da GitHub Pages!</p>
+            <strong>Come usare GitHub Pages:</strong>
+            <p>1. Carica questo file come <code>index.html</code> nel tuo repository.</p>
+            <p>2. Vai su <code>Settings > Pages</code> e pubblica dal branch <code>main</code>.</p>
+            <p>3. <strong>Attendi 5-10 minuti</strong> affinché le modifiche siano online!</p>
         </div>
     </div>
 
@@ -203,6 +213,8 @@
             const valorePerKg = parseFloat(document.getElementById('valorePerKg').value) || 0;
             const decisionResultDiv = document.getElementById('decisionResult');
             const decisionExplanation = document.getElementById('decisionExplanation');
+
+            if (!decisionResultDiv) return; // Controllo di sicurezza
 
             if (valorePerKg >= currentMinKgValue) {
                 decisionResultDiv.textContent = "TENERE";
