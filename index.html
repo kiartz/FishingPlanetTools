@@ -8,29 +8,37 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 20px;
-            background-color: #121212; /* Sfondo scuro */
-            color: #e0e0e0; /* Testo chiaro */
+            background-color: #121212;
+            color: #e0e0e0;
             line-height: 1.6;
         }
         .container {
-            max-width: 900px;
+            max-width: 1200px; /* Aumentato per layout a colonne */
             margin: auto;
-            background: #1e1e1e; /* Sfondo container scuro */
+            background: #1e1e1e;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
             border: 1px solid #333;
         }
-        h1, h2, h3 {
-            color: #ffffff; /* Titoli chiari */
+        h1 {
+            color: #ffffff;
             border-bottom: 2px solid #3a3a3a;
             padding-bottom: 10px;
-            margin-top: 30px;
         }
-        hr {
-            border: none;
-            border-top: 1px solid #3a3a3a;
+        h2 {
+            margin-top: 0;
+            color: #eee;
+            border-bottom: 1px solid #3a3a3a;
+            padding-bottom: 8px;
         }
+        h3 {
+            color: #ffffff;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        hr { display: none; } /* Rimosse, ora usiamo colonne */
+
         .input-group {
             margin-bottom: 15px;
         }
@@ -38,21 +46,43 @@
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
-            color: #bbbbbb; /* Etichette chiare */
+            color: #bbbbbb;
         }
         .input-group input[type="number"] {
-            width: calc(100% - 22px); /* Adattato per padding */
+            width: calc(100% - 22px);
             padding: 10px;
             border: 1px solid #444;
-            background-color: #2c2c2c; /* Sfondo input scuro */
-            color: #f0f0f0; /* Testo input chiaro */
+            background-color: #2c2c2c;
+            color: #f0f0f0;
             border-radius: 5px;
             font-size: 1rem;
             box-sizing: border-box;
         }
+
+        /* --- NUOVO LAYOUT A COLONNE --- */
+        .main-layout {
+            display: flex;
+            flex-wrap: wrap; /* Per reattività su schermi piccoli */
+            gap: 30px; /* Spazio tra le colonne */
+            margin-top: 20px;
+        }
+        .setup-column {
+            flex: 1; /* Colonna setup occupa 1 parte */
+            min-width: 300px;
+            background: #252525; /* Sfondo leggermente diverso per staccare */
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .decision-column {
+            flex: 2; /* Colonna decisione occupa 2 parti (più grande) */
+            min-width: 320px;
+        }
+        /* --- FINE NUOVO LAYOUT --- */
+
+
         .results {
-            background-color: #2a2a3a; /* Sfondo risultati */
-            border-left: 5px solid #2196F3; /* Accento blu */
+            background-color: #2a2a3a;
+            border-left: 5px solid #2196F3;
             padding: 15px;
             margin-top: 20px;
             border-radius: 5px;
@@ -62,32 +92,46 @@
             font-size: 1.1rem;
         }
         .results strong {
-            color: #81b9ff; /* Testo forte (blu chiaro) */
+            color: #81b9ff;
+        }
+
+        /* Stili per la colonna decisione (più grande) */
+        .decision-column h3 {
+            font-size: 1.5rem; /* Titolo "Decisione" più grande */
+            text-align: center;
+            margin-bottom: 15px;
         }
         .decision {
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin-top: 20px;
+            font-size: 3.5rem; /* "TENERE/RILASCIARE" molto più grande */
+            font-weight: 900; /* Più grassetto */
             text-align: center;
-            padding: 10px;
-            border-radius: 5px;
+            padding: 30px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        .decision-column small {
+            display: block;
+            text-align: center;
+            margin-top: 5px;
         }
         .decision.green {
-            color: #66bb6a; /* Verde chiaro */
-            background-color: #2e4b31; /* Sfondo verde scuro */
+            color: #66bb6a;
+            background-color: #2e4b31;
         }
         .decision.red {
-            color: #ef5350; /* Rosso chiaro */
-            background-color: #4b2e2e; /* Sfondo rosso scuro */
+            color: #ef5350;
+            background-color: #4b2e2e;
         }
-        .flex-container {
+
+        /* Flex container per i soli input della colonna decisione */
+        .decision-inputs {
             display: flex;
             gap: 20px;
             flex-wrap: wrap;
         }
-        .flex-item {
+        .decision-inputs .flex-item {
             flex: 1;
-            min-width: 280px;
+            min-width: 200px;
         }
     </style>
 </head>
@@ -95,14 +139,14 @@
 
     <div class="container">
         <h1>🐟 Calcolatore di Redditività della Pesca</h1>
-        <p>Analizza i costi e l'obiettivo di pescato per determinare la soglia minima di valore, e decidi se trattenere il pesce in tempo reale.</p>
+        <p>Analizza costi e obiettivo per determinare la soglia di valore e decidi se trattenere il pescato.</p>
 
-        
-<h2>1. Analisi dei Costi e Obiettivo</h2>
-
-        <div class="flex-container">
-            <div class="flex-item">
-                <h3>Costi Totali (€)</h3>
+        <div class="main-layout">
+            
+            <div class="setup-column">
+                <h2>1. Setup Iniziale</h2>
+                
+                <h3>Costi Operativi (€)</h3>
                 <div class="input-group">
                     <label for="costoViaggio">Costo Viaggio (€)</label>
                     <input type="number" id="costoViaggio" value="3000" min="0" oninput="calculateMinKgValue()">
@@ -113,51 +157,44 @@
                 </div>
                 <div class="input-group">
                     <label for="altreSpese">Altre Spese (€)</label>
-                    <input type="number"id="altreSpese" value="0" min="0" oninput="calculateMinKgValue()">
+                    <input type="number" id="altreSpese" value="0" min="0" oninput="calculateMinKgValue()">
                 </div>
-            </div>
 
-            <div class="flex-item">
-                <h3>Obiettivo</h3>
+                <h3>Obiettivo & Riepilogo</h3>
                 <div class="input-group">
                     <label for="obiettivoKg">Obiettivo Pescato Totale (Kg)</label>
                     <input type="number" id="obiettivoKg" value="25" min="0.1" step="0.1" oninput="calculateMinKgValue()">
                 </div>
-            </div>
-
-            <div class="flex-item">
-                <h3>Riepilogo</h3>
                 <div class="results">
                     <p>Costi Totali: <strong id="totalCosts">0.00 €</strong></p>
-                    <p>€/Kg Minimo Necessario (Soglia): <strong id="minKgValue">0.00 €</strong></p>
-                    <small>Questo è il valore minimo per ogni Kg di pescato per coprire i costi.</small>
+                    <p>€/Kg Minimo (Soglia): <strong id="minKgValue">0.00 €</strong></p>
                 </div>
             </div>
-        </div>
-        <hr>
 
-        
-<h2>2. Simulazione in Tempo Reale (Decisione)</h2>
-        <p>La tua soglia minima per Kg è: <strong id="currentMinKgValueDisplay">0.00 €</strong></p>
+            <div class="decision-column">
+                <h2>2. Decisione in Tempo Reale</h2>
+                <p>Soglia minima attuale: <strong id="currentMinKgValueDisplay" style="color: #81b9ff; font-size: 1.1rem;">0.00 €</strong></p>
 
-        <div class="flex-container">
-            <div class="flex-item">
-                <div class="input-group">
-                    <label for="pesoPesce">Peso Pesce (Kg)</label>
-                    <input type="number" id="pesoPesce" value="1.0" min="0.01" step="0.1" oninput="makeDecision()">
+                <div class="decision-inputs">
+                    <div class="flex-item">
+                        <div class="input-group">
+                            <label for="pesoPesce">Peso Pesce (Kg)</label>
+                            <input type="number" id="pesoPesce" value="1.0" min="0.01" step="0.1" oninput="makeDecision()">
+                        </div>
+                    </div>
+                    <div class="flex-item">
+                        <div class="input-group">
+                            <label for="valorePerKg">Valore per Kg (€)</label>
+                            <input type="number" id="valorePerKg" value="150.0" min="0.01" step="0.1" oninput="makeDecision()">
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="flex-item">
-                <div class="input-group">
-                    <label for="valorePerKg">Valore per Kg (€)</label>
-                    <input type="number" id="valorePerKg" value="150.0" min="0.01" step="0.1" oninput="makeDecision()">
-                </div>
-            </div>
-            <div class="flex-item">
+                
                 <h3>Decisione</h3>
                 <div id="decisionResult" class="decision"></div>
                 <small id="decisionExplanation"></small>
             </div>
+
         </div>
         
     </div>
