@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore Economico di Pesca</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        .input-group input[type="number"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .results {
+            background-color: #e8f5e9;
+            border-left: 5px solid #4CAF50;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        .results p {
+            margin: 0 0 8px 0;
+            font-size: 1.1rem;
+        }
+        .results strong {
+            color: #2e7d32;
+        }
+        .decision {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .decision.green {
+            color: #28a745;
+            background-color: #d4edda;
+        }
+        .decision.red {
+            color: #dc3545;
+            background-color: #f8d7da;
+        }
+        .info-box {
+            background-color: #e7f3ff;
+            border-left: 5px solid #2196F3;
+            padding: 15px;
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+        .flex-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .flex-item {
+            flex: 1;
+            min-width: 280px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🐟 Calcolatore di Redditività della Pesca</h1>
+        <p>Analizza i costi e l'obiettivo di pescato per determinare la soglia minima di valore, e decidi se trattenere il pesce in tempo reale.</p>
+
+        <h2>1. Analisi dei Costi e Obiettivo</h2>
+
+        <div class="flex-container">
+            <div class="flex-item">
+                <h3>Costi Totali (€)</h3>
+                <div class="input-group">
+                    <label for="costoViaggio">Costo Viaggio (€)</label>
+                    <input type="number" id="costoViaggio" value="3000" min="0" oninput="calculateMinKgValue()">
+                </div>
+                <div class="input-group">
+                    <label for="costoLicenza">Costo Licenza (€)</label>
+                    <input type="number" id="costoLicenza" value="1500" min="0" oninput="calculateMinKgValue()">
+                </div>
+                <div class="input-group">
+                    <label for="altreSpese">Altre Spese (€)</label>
+                    <input type="number" id="altreSpese" value="0" min="0" oninput="calculateMinKgValue()">
+                </div>
+            </div>
+
+            <div class="flex-item">
+                <h3>Obiettivo</h3>
+                <div class="input-group">
+                    <label for="obiettivoKg">Obiettivo Pescato Totale (Kg)</label>
+                    <input type="number" id="obiettivoKg" value="25" min="1" step="0.1" oninput="calculateMinKgValue()">
+                </div>
+            </div>
+
+            <div class="flex-item">
+                <h3>Riepilogo</h3>
+                <div class="results">
+                    <p>Costi Totali: <strong id="totalCosts">0.00 €</strong></p>
+                    <p>€/Kg Minimo Necessario (Soglia): <strong id="minKgValue">0.00 €</strong></p>
+                    <small>Questo è il valore minimo per ogni Kg di pescato per coprire i costi e raggiungere l'obiettivo.</small>
+                </div>
+            </div>
+        </div>
+        <hr>
+
+        <h2>2. Simulazione in Tempo Reale (Decisione)</h2>
+        <p>La tua soglia minima per Kg è: <strong id="currentMinKgValueDisplay">0.00 €</strong></p>
+
+        <div class="flex-container">
+            <div class="flex-item">
+                <div class="input-group">
+                    <label for="pesoPesce">Peso Pesce (Kg)</label>
+                    <input type="number" id="pesoPesce" value="1.0" min="0.01" step="0.1" oninput="makeDecision()">
+                </div>
+            </div>
+            <div class="flex-item">
+                <div class="input-group">
+                    <label for="valorePerKg">Valore per Kg (€)</label>
+                    <input type="number" id="valorePerKg" value="150.0" min="0.01" step="0.1" oninput="makeDecision()">
+                </div>
+            </div>
+            <div class="flex-item">
+                <h3>Decisione</h3>
+                <div id="decisionResult" class="decision"></div>
+                <small id="decisionExplanation"></small>
+            </div>
+        </div>
+        <hr>
+
+        <div class="info-box">
+            <strong>Istruzioni per l'utilizzo su GitHub Pages:</strong>
+            <p>1. Crea un nuovo repository su GitHub (es. <code>calcolatore-pesca-html</code>).</p>
+            <p>2. Carica questo file (<code>index.html</code>) nel repository.</p>
+            <p>3. Vai nelle impostazioni del repository, sezione "Pages".</p>
+            <p>4. Seleziona "main" come branch e "/ (root)" come cartella per la pubblicazione.</p>
+            <p>5. Salva. Dopo qualche minuto, la tua app sarà online all'indirizzo fornito da GitHub Pages!</p>
+        </div>
+    </div>
+
+    <script>
+        // Funzione per formattare i numeri come valuta
+        function formatCurrency(value) {
+            return value.toLocaleString('it-IT', { style: 'currency', currency: 'EUR' });
+        }
+
+        let currentMinKgValue = 0; // Variabile globale per la soglia minima
+
+        function calculateMinKgValue() {
+            const costoViaggio = parseFloat(document.getElementById('costoViaggio').value) || 0;
+            const costoLicenza = parseFloat(document.getElementById('costoLicenza').value) || 0;
+            const altreSpese = parseFloat(document.getElementById('altreSpese').value) || 0;
+            const obiettivoKg = parseFloat(document.getElementById('obiettivoKg').value) || 0;
+
+            const costiTotali = costoViaggio + costoLicenza + altreSpese;
+            document.getElementById('totalCosts').textContent = formatCurrency(costiTotali);
+
+            if (obiettivoKg > 0) {
+                currentMinKgValue = costiTotali / obiettivoKg;
+            } else {
+                currentMinKgValue = 0;
+            }
+            document.getElementById('minKgValue').textContent = formatCurrency(currentMinKgValue);
+            document.getElementById('currentMinKgValueDisplay').textContent = formatCurrency(currentMinKgValue);
+
+            // Richiama la funzione di decisione dopo aver aggiornato la soglia
+            makeDecision();
+        }
+
+        function makeDecision() {
+            const pesoPesce = parseFloat(document.getElementById('pesoPesce').value) || 0;
+            const valorePerKg = parseFloat(document.getElementById('valorePerKg').value) || 0;
+            const decisionResultDiv = document.getElementById('decisionResult');
+            const decisionExplanation = document.getElementById('decisionExplanation');
+
+            if (valorePerKg >= currentMinKgValue) {
+                decisionResultDiv.textContent = "TENERE";
+                decisionResultDiv.className = "decision green";
+                decisionExplanation.textContent = `Il valore di ${formatCurrency(valorePerKg)}/Kg è superiore o uguale alla soglia di ${formatCurrency(currentMinKgValue)}/Kg.`;
+            } else {
+                decisionResultDiv.textContent = "RILASCIARE";
+                decisionResultDiv.className = "decision red";
+                decisionExplanation.textContent = `Il valore di ${formatCurrency(valorePerKg)}/Kg è inferiore alla soglia di ${formatCurrency(currentMinKgValue)}/Kg.`;
+            }
+        }
+
+        // Chiamata iniziale per calcolare e visualizzare i valori al caricamento della pagina
+        document.addEventListener('DOMContentLoaded', () => {
+            calculateMinKgValue();
+            makeDecision();
+        });
+    </script>
+</body>
+</html>
